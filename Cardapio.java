@@ -1,56 +1,59 @@
-import java.util.Scanner;  // Importa a classe Scanner para entrada de dados do usuário
+import java.util.Scanner;
 
 public class Cardapio {
 
-    // Declara uma constante que define o número máximo de produtos
+    // Constantes para o limite de registros
     private static final int LIM_REG = 100;
 
-    // Matriz para armazenar os produtos, com 4 colunas: [Código, Produto, Ativo, Preço]
+    // Matriz para produtos e clientes
     private static final String[][] produtos = new String[LIM_REG][4];
+    private static final String[][] clientes = new String[LIM_REG][10];
 
-    // Variável para contar quantos produtos estão cadastrados
+    // Contadores de produtos e clientes
     private static int totalProdutos = 0;
+    private static int totalClientes = 0;
 
-    // Scanner para ler as entradas do usuário
+    // Scanner para entrada de dados
     private static Scanner entradaDados = new Scanner(System.in);
 
     public static void main(String[] args) {
-        int opcao;  // Variável que armazena a escolha do menu principal
+        int opcao;
 
         do {
-            // Exibe o menu principal na tela
             exibirMenuPrincipal();
-            // Lê a opção digitada pelo usuário
             opcao = entradaDados.nextInt();
-            entradaDados.nextLine(); // Consumir a quebra de linha que sobra após o nextInt()
+            entradaDados.nextLine(); // Consumir a quebra de linha após o nextInt()
 
-            // Switch para executar ações de acordo com a opção escolhida
             switch (opcao) {
                 case 1:
-                    menuCadastroProduto(); // Chama o menu de cadastro de produtos
+                    menuCadastroProduto();
                     break;
                 case 2:
-                    imprimirCardapio(); // Chama a função que imprime o cardápio
+                    menuCadastroCliente();
                     break;
                 case 3:
-                    System.out.println("Saindo do sistema..."); // Opção de sair
+                    imprimirCardapio();
+                    break;
+                case 4:
+                    System.out.println("Saindo do sistema...");
                     break;
                 default:
-                    System.out.println("Opção inválida! Tente novamente."); // Mensagem de erro para opção inválida
+                    System.out.println("Opção inválida! Tente novamente.");
             }
-        } while (opcao != 3); // Repete até que o usuário escolha a opção "Sair"
+        } while (opcao != 4);
     }
 
-    // Função que exibe o menu principal
     private static void exibirMenuPrincipal() {
         System.out.println("\nMenu Principal:");
         System.out.println("1. Cadastro de Produtos");
-        System.out.println("2. Imprimir Cardápio");
-        System.out.println("3. Sair");
+        System.out.println("2. Cadastro de Clientes");
+        System.out.println("3. Imprimir Cardápio");
+        System.out.println("4. Sair");
         System.out.print("Escolha uma opção: ");
     }
 
-    // Função que exibe o menu de cadastro de produtos e trata as opções
+    // ========================== CADASTRO DE PRODUTOS ========================== //
+    
     private static void menuCadastroProduto() {
         System.out.println("\nCadastro de Produtos:");
         System.out.println("1. Incluir Produto");
@@ -59,218 +62,411 @@ public class Cardapio {
         System.out.println("4. Consultar Produto");
         System.out.print("Escolha uma opção: ");
         int opcao = entradaDados.nextInt();
-        entradaDados.nextLine(); // Consumir a quebra de linha
+        entradaDados.nextLine();
 
-        // Switch para escolher qual operação do cadastro de produtos será realizada
         switch (opcao) {
             case 1:
-                incluirProduto(); // Chama função para incluir um novo produto
+                incluirProduto();
                 break;
             case 2:
-                alterarProduto(); // Chama função para alterar um produto existente
+                alterarProduto();
                 break;
             case 3:
-                excluirProduto(); // Chama função para excluir um produto
+                excluirProduto();
                 break;
             case 4:
-                consultarProduto(); // Chama função para consultar um produto pelo código
+                consultarProduto();
                 break;
             default:
-                System.out.println("Opção inválida!"); // Mensagem de erro para opção inválida
+                System.out.println("Opção inválida!");
         }
     }
 
-    // Função para incluir um novo produto
     private static void incluirProduto() {
-        // Verifica se a capacidade máxima de produtos foi atingida
         if (totalProdutos >= LIM_REG) {
             System.out.println("Cadastro de produtos cheio.");
-            return;  // Sai da função caso não seja possível incluir mais produtos
+            return;
         }
 
         String codigo;
-        // Laço para garantir que o código tenha 6 caracteres válidos
         do {
             System.out.print("Código (6 caracteres alfanuméricos): ");
-            codigo = entradaDados.nextLine().toUpperCase(); // Converte o código para letras maiúsculas
+            codigo = entradaDados.nextLine().toUpperCase();
             if (codigo.length() != 6) {
                 System.out.println("Código inválido! Deve conter exatamente 6 caracteres.");
             }
-        } while (codigo.length() != 6);  // Repete até que o código seja válido
+        } while (codigo.length() != 6);
 
         String produto;
-        // Laço para garantir que a descrição do produto seja válida (3 a 60 caracteres)
         do {
             System.out.print("Produto (min 3, max 60 caracteres): ");
-            produto = entradaDados.nextLine().toUpperCase(); // Converte a descrição para letras maiúsculas
+            produto = entradaDados.nextLine().toUpperCase();
             if (produto.length() < 3 || produto.length() > 60) {
                 System.out.println("Descrição do produto inválida!");
             }
-        } while (produto.length() < 3 || produto.length() > 60);  // Repete até que a descrição seja válida
+        } while (produto.length() < 3 || produto.length() > 60);
 
         double preco;
-        // Laço para garantir que o preço seja positivo
         do {
             System.out.print("Preço (formato 0.00): ");
             preco = entradaDados.nextDouble();
-            entradaDados.nextLine(); // Consumir a quebra de linha
+            entradaDados.nextLine();
 
             if (preco < 0) {
                 System.out.println("O preço deve ser positivo.");
             }
-        } while (preco < 0);  // Repete até que o preço seja válido
+        } while (preco < 0);
 
-        // Laço para garantir que o valor de ativo seja válido
         String ativo;
         do {
             System.out.print("Ativo (true para ativo, false para desativado): ");
             ativo = entradaDados.nextLine().toUpperCase();
-
             if (!ativo.equals("TRUE") && !ativo.equals("FALSE")) {
                 System.out.println("Valor inválido! Informe true ou false.");
             }
         } while (!ativo.equals("TRUE") && !ativo.equals("FALSE"));
 
-        // Adiciona o produto na matriz, preenchendo os dados
-        produtos[totalProdutos][0] = codigo;  // Código
-        produtos[totalProdutos][1] = produto; // Nome do produto
-        produtos[totalProdutos][2] = ativo;   // Ativo ou desativado
-        produtos[totalProdutos][3] = String.format("%.2f", preco);  // Formata o preço com duas casas decimais
-        totalProdutos++; // Incrementa o total de produtos cadastrados
+        produtos[totalProdutos][0] = codigo;
+        produtos[totalProdutos][1] = produto;
+        produtos[totalProdutos][2] = ativo;
+        produtos[totalProdutos][3] = String.format("%.2f", preco);
+        totalProdutos++;
 
         System.out.println("Produto cadastrado com sucesso.");
     }
 
-    // Função para alterar um produto existente, mantendo os valores originais caso o usuário não altere
     private static void alterarProduto() {
         System.out.print("Digite o código do produto a alterar: ");
-        String codigo = entradaDados.nextLine().toUpperCase();  // Lê o código em letras maiúsculas
+        String codigo = entradaDados.nextLine().toUpperCase();
 
-        // Busca o produto pelo código
         int indice = buscarProdutoPorCodigo(codigo);
         if (indice == -1) {
-            System.out.println("Produto não existe no cadastro.");  // Mensagem caso o produto não seja encontrado
-            return;  // Sai da função
+            System.out.println("Produto não existe no cadastro.");
+            return;
         }
 
-        // Mostra os valores atuais do produto
-        System.out.println("Código atual: " + produtos[indice][0]);
-        System.out.println("Produto atual: " + produtos[indice][1]);
-        System.out.println("Preço atual: " + produtos[indice][3]);
-        System.out.println("Ativo atual: " + produtos[indice][2]);
+        System.out.println("Alterar Produto (deixe em branco para manter o valor original):");
 
-        // Pergunta se quer alterar o nome do produto e valida se for alterado
         String novoProduto;
         do {
-            System.out.print("Novo Produto (min 3, max 60 caracteres) [Enter para manter o atual]: ");
+            System.out.print("Novo Produto (min 3, max 60 caracteres): ");
             novoProduto = entradaDados.nextLine().toUpperCase();
-            if (novoProduto.isEmpty()) {
-                novoProduto = produtos[indice][1];  // Mantém o valor original se não for alterado
-            } else if (novoProduto.length() < 3 || novoProduto.length() > 60) {
-                System.out.println("Descrição do produto inválida!");
-                novoProduto = null;  // Requer nova entrada se for inválido
+            if (!novoProduto.isEmpty()) {
+                if (novoProduto.length() < 3 || novoProduto.length() > 60) {
+                    System.out.println("Descrição do produto inválida!");
+                    novoProduto = null;
+                }
+            } else {
+                novoProduto = produtos[indice][1];
             }
         } while (novoProduto == null);
+        produtos[indice][1] = novoProduto;
 
-        // Pergunta se quer alterar o preço e valida se for alterado
         String novoPrecoStr;
-        double novoPreco = 0;
+        double novoPreco;
         do {
-            System.out.print("Novo Preço (formato 0.00) [Enter para manter o atual]: ");
+            System.out.print("Novo Preço (formato 0.00): ");
             novoPrecoStr = entradaDados.nextLine();
             if (!novoPrecoStr.isEmpty()) {
                 novoPreco = Double.parseDouble(novoPrecoStr);
                 if (novoPreco < 0) {
                     System.out.println("O preço deve ser positivo.");
-                    novoPreco = -1;  // Requer nova entrada se for inválido
+                    novoPreco = -1;
                 }
+            } else {
+                novoPreco = Double.parseDouble(produtos[indice][3]);
             }
         } while (novoPreco < 0);
+        produtos[indice][3] = String.format("%.2f", novoPreco);
 
-        // Pergunta se quer alterar o status de ativo e valida se for alterado
         String novoAtivo;
         do {
-            System.out.print("Novo Ativo (true para ativo, false para desativado) [Enter para manter o atual]: ");
+            System.out.print("Novo Ativo (true para ativo, false para desativado): ");
             novoAtivo = entradaDados.nextLine().toUpperCase();
-            if (novoAtivo.isEmpty()) {
-                novoAtivo = produtos[indice][2];  // Mantém o valor original se não for alterado
-            } else if (!novoAtivo.equals("TRUE") && !novoAtivo.equals("FALSE")) {
-                System.out.println("Valor inválido! Informe true ou false.");
-                novoAtivo = null;  // Requer nova entrada se for inválido
+            if (!novoAtivo.isEmpty()) {
+                if (!novoAtivo.equals("TRUE") && !novoAtivo.equals("FALSE")) {
+                    System.out.println("Valor inválido! Informe true ou false.");
+                    novoAtivo = null;
+                }
+            } else {
+                novoAtivo = produtos[indice][2];
             }
         } while (novoAtivo == null);
-
-        // Atualiza os dados na matriz
-        produtos[indice][1] = novoProduto;
-        produtos[indice][3] = String.format("%.2f", novoPreco);  // Formata o preço com duas casas decimais
-        produtos[indice][2] = novoAtivo.equals("TRUE") ? "TRUE" : "FALSE";
+        produtos[indice][2] = novoAtivo;
 
         System.out.println("Produto alterado com sucesso.");
     }
 
-    // Função para excluir um produto pelo código
     private static void excluirProduto() {
         System.out.print("Digite o código do produto a excluir: ");
-        String codigo = entradaDados.nextLine().toUpperCase();  // Lê o código em letras maiúsculas
+        String codigo = entradaDados.nextLine().toUpperCase();
 
-        // Busca o produto pelo código
         int indice = buscarProdutoPorCodigo(codigo);
         if (indice == -1) {
-            System.out.println("Produto não existe no cadastro.");  // Mensagem caso o produto não seja encontrado
+            System.out.println("Produto não existe no cadastro.");
             return;
         }
 
-        // Desloca todos os produtos após o excluído para "remover" o produto da matriz
         for (int i = indice; i < totalProdutos - 1; i++) {
-            produtos[i] = produtos[i + 1];  // Desloca os produtos para cima
+            produtos[i] = produtos[i + 1];
         }
-        totalProdutos--;  // Reduz o total de produtos cadastrados
+        totalProdutos--;
         System.out.println("Produto excluído com sucesso.");
     }
 
-    // Função para consultar um produto pelo código
     private static void consultarProduto() {
         System.out.print("Digite o código do produto: ");
-        String codigo = entradaDados.nextLine().toUpperCase();  // Lê o código em letras maiúsculas
+        String codigo = entradaDados.nextLine().toUpperCase();
 
-        // Busca o produto pelo código
         int indice = buscarProdutoPorCodigo(codigo);
         if (indice == -1) {
-            System.out.println("Produto não existe no cadastro.");  // Mensagem caso o produto não seja encontrado
+            System.out.println("Produto não existe no cadastro.");
             return;
         }
 
-        // Exibe os dados do produto encontrado
         System.out.println("Código: " + produtos[indice][0]);
         System.out.println("Produto: " + produtos[indice][1]);
         System.out.println("Ativo: " + produtos[indice][2]);
         System.out.println("Preço: R$" + produtos[indice][3]);
     }
 
-    // Função para buscar um produto pelo código
     private static int buscarProdutoPorCodigo(String codigo) {
-        // Percorre a matriz de produtos
         for (int i = 0; i < totalProdutos; i++) {
             if (produtos[i][0].equals(codigo)) {
-                return i;  // Retorna o índice do produto se encontrado
+                return i;
             }
         }
-        return -1;  // Retorna -1 se o produto não for encontrado
+        return -1;
     }
 
-    // Função que imprime o cardápio com os produtos ativos
+    // Função para imprimir o cardápio
     private static void imprimirCardapio() {
         System.out.println("-------------------------------------------------------------------------------------------------");
         System.out.println("CÓDIGO PRODUTO                                                                              VALOR");
         System.out.println("-------------------------------------------------------------------------------------------------");
 
-        // Percorre todos os produtos cadastrados e imprime os que estão ativos
         for (int i = 0; i < totalProdutos; i++) {
-            if (produtos[i][2].equals("TRUE")) {  // Verifica se o produto está ativo
-                // Formata e imprime o código, a descrição do produto e o preço
+            if (produtos[i][2].equals("TRUE")) {
                 System.out.printf("%-7s %-80s %6s\n", produtos[i][0], produtos[i][1], produtos[i][3]);
             }
         }
         System.out.println("-------------------------------------------------------------------------------------------------");
+    }
+
+    // ========================== CADASTRO DE CLIENTES ========================== //
+    
+    private static void menuCadastroCliente() {
+        System.out.println("\nCadastro de Clientes:");
+        System.out.println("1. Incluir Cliente");
+        System.out.println("2. Alterar Cliente");
+        System.out.println("3. Excluir Cliente");
+        System.out.println("4. Consultar Cliente");
+        System.out.print("Escolha uma opção: ");
+        int opcao = entradaDados.nextInt();
+        entradaDados.nextLine();
+
+        switch (opcao) {
+            case 1:
+                incluirCliente();
+                break;
+            case 2:
+                alterarCliente();
+                break;
+            case 3:
+                excluirCliente();
+                break;
+            case 4:
+                consultarCliente();
+                break;
+            default:
+                System.out.println("Opção inválida!");
+        }
+    }
+
+    private static void incluirCliente() {
+        if (totalClientes >= LIM_REG) {
+            System.out.println("Cadastro de clientes cheio.");
+            return;
+        }
+
+        String nome;
+        do {
+            System.out.print("Nome completo (min 6, max 60 caracteres): ");
+            nome = entradaDados.nextLine().toUpperCase();
+            if (nome.length() < 6 || nome.length() > 60) {
+                System.out.println("Nome inválido!");
+            }
+        } while (nome.length() < 6 || nome.length() > 60);
+
+        String logradouro, numero, complemento, bairro, cidade, cep, estado, sexo, telefone, email, nascimento, autorizado;
+
+        do {
+            System.out.print("Logradouro (máx 60 caracteres): ");
+            logradouro = entradaDados.nextLine().toUpperCase();
+        } while (logradouro.length() > 60);
+
+        do {
+            System.out.print("Número (máx 4 dígitos): ");
+            numero = entradaDados.nextLine();
+        } while (numero.length() > 4);
+
+        System.out.print("Complemento (opcional, máx 60 caracteres): ");
+        complemento = entradaDados.nextLine().toUpperCase();
+
+        do {
+            System.out.print("Bairro (máx 60 caracteres): ");
+            bairro = entradaDados.nextLine().toUpperCase();
+        } while (bairro.length() > 60);
+
+        do {
+            System.out.print("Cidade (máx 60 caracteres): ");
+            cidade = entradaDados.nextLine().toUpperCase();
+        } while (cidade.length() > 60);
+
+        do {
+            System.out.print("CEP (99999-999): ");
+            cep = entradaDados.nextLine();
+        } while (!cep.matches("\\d{5}-\\d{3}"));
+
+        do {
+            System.out.print("Estado (2 letras): ");
+            estado = entradaDados.nextLine().toUpperCase();
+        } while (!estado.matches("[A-Z]{2}"));
+
+        do {
+            System.out.print("Sexo (M ou F): ");
+            sexo = entradaDados.nextLine().toUpperCase();
+        } while (!sexo.equals("M") && !sexo.equals("F"));
+
+        do {
+            System.out.print("Telefone ((99) X9999-9999): ");
+            telefone = entradaDados.nextLine();
+        } while (!telefone.matches("\\(\\d{2}\\) [1-9]\\d{4}-\\d{4}"));
+
+        System.out.print("Email (opcional, máx 80 caracteres): ");
+        email = entradaDados.nextLine();
+
+        do {
+            System.out.print("Data de Nascimento (dd/mm/aaaa): ");
+            nascimento = entradaDados.nextLine();
+        } while (!nascimento.matches("\\d{2}/\\d{2}/\\d{4}"));
+
+        do {
+            System.out.print("Autorizado a receber mensagens (true ou false): ");
+            autorizado = entradaDados.nextLine().toUpperCase();
+        } while (!autorizado.equals("TRUE") && !autorizado.equals("FALSE"));
+
+        clientes[totalClientes][0] = nome;
+        clientes[totalClientes][1] = logradouro;
+        clientes[totalClientes][2] = numero;
+        clientes[totalClientes][3] = complemento;
+        clientes[totalClientes][4] = bairro;
+        clientes[totalClientes][5] = cidade;
+        clientes[totalClientes][6] = cep;
+        clientes[totalClientes][7] = estado;
+        clientes[totalClientes][8] = sexo;
+        clientes[totalClientes][9] = telefone;
+
+        totalClientes++;
+        System.out.println("Cliente cadastrado com sucesso.");
+    }
+
+    private static void alterarCliente() {
+        System.out.print("Digite o nome do cliente a alterar: ");
+        String nome = entradaDados.nextLine().toUpperCase();
+
+        int indice = buscarClientePorNome(nome);
+        if (indice == -1) {
+            System.out.println("Cliente não existe no cadastro.");
+            return;
+        }
+
+        System.out.println("Alterar Cliente (deixe em branco para manter o valor original):");
+
+        String novoLogradouro = alterarCampo("Novo Logradouro (máx 60 caracteres): ", clientes[indice][1], 60);
+        clientes[indice][1] = novoLogradouro;
+
+        String novoNumero = alterarCampo("Novo Número (máx 4 dígitos): ", clientes[indice][2], 4);
+        clientes[indice][2] = novoNumero;
+
+        String novoComplemento = alterarCampo("Novo Complemento (máx 60 caracteres): ", clientes[indice][3], 60);
+        clientes[indice][3] = novoComplemento;
+
+        String novoBairro = alterarCampo("Novo Bairro (máx 60 caracteres): ", clientes[indice][4], 60);
+        clientes[indice][4] = novoBairro;
+
+        String novaCidade = alterarCampo("Nova Cidade (máx 60 caracteres): ", clientes[indice][5], 60);
+        clientes[indice][5] = novaCidade;
+
+        String novoCep = alterarCampo("Novo CEP (99999-999): ", clientes[indice][6], 9);
+        clientes[indice][6] = novoCep;
+
+        String novoEstado = alterarCampo("Novo Estado (2 letras): ", clientes[indice][7], 2);
+        clientes[indice][7] = novoEstado;
+
+        System.out.println("Cliente alterado com sucesso.");
+    }
+
+    private static String alterarCampo(String mensagem, String valorAntigo, int tamanhoMax) {
+        String novoValor;
+        do {
+            System.out.print(mensagem);
+            novoValor = entradaDados.nextLine();
+            if (novoValor.isEmpty()) {
+                novoValor = valorAntigo;
+            } else if (novoValor.length() > tamanhoMax) {
+                System.out.println("Valor excede o tamanho máximo permitido.");
+                novoValor = null;
+            }
+        } while (novoValor == null);
+        return novoValor;
+    }
+
+    private static void excluirCliente() {
+        System.out.print("Digite o nome do cliente a excluir: ");
+        String nome = entradaDados.nextLine().toUpperCase();
+
+        int indice = buscarClientePorNome(nome);
+        if (indice == -1) {
+            System.out.println("Cliente não existe no cadastro.");
+            return;
+        }
+
+        for (int i = indice; i < totalClientes - 1; i++) {
+            clientes[i] = clientes[i + 1];
+        }
+        totalClientes--;
+        System.out.println("Cliente excluído com sucesso.");
+    }
+
+    private static void consultarCliente() {
+        System.out.print("Digite o nome do cliente: ");
+        String nome = entradaDados.nextLine().toUpperCase();
+
+        int indice = buscarClientePorNome(nome);
+        if (indice == -1) {
+            System.out.println("Cliente não existe no cadastro.");
+            return;
+        }
+
+        System.out.println("Nome: " + clientes[indice][0]);
+        System.out.println("Logradouro: " + clientes[indice][1]);
+        System.out.println("Número: " + clientes[indice][2]);
+        System.out.println("Complemento: " + clientes[indice][3]);
+        System.out.println("Bairro: " + clientes[indice][4]);
+        System.out.println("Cidade: " + clientes[indice][5]);
+        System.out.println("CEP: " + clientes[indice][6]);
+        System.out.println("Estado: " + clientes[indice][7]);
+        System.out.println("Sexo: " + clientes[indice][8]);
+        System.out.println("Telefone: " + clientes[indice][9]);
+    }
+
+    private static int buscarClientePorNome(String nome) {
+        for (int i = 0; i < totalClientes; i++) {
+            if (clientes[i][0].equals(nome)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

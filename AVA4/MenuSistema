@@ -1,0 +1,60 @@
+import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
+public class MenuSistema {
+    private JMenuBar menuPrincipal;
+    private JMenu menuCadastro;
+    private JMenu menuVisualizacao;
+    private JMenu menuSair;
+
+    public MenuSistema() {
+        criarMenu();
+        adicionarOpcoes();
+    }
+
+    private void criarMenu() {
+        menuPrincipal = new JMenuBar();
+
+        // Cria e adiciona os menus principais
+        menuCadastro = new JMenu("Cadastro");
+        menuVisualizacao = new JMenu("Visualização");
+        menuSair = new JMenu("Sair");
+
+        // Adiciona evento de saída ao menu "Sair"
+        menuSair.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                System.exit(0); // Sai do sistema
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) { }
+
+            @Override
+            public void menuCanceled(MenuEvent e) { }
+        });
+
+        menuPrincipal.add(menuCadastro);
+        menuPrincipal.add(menuVisualizacao);
+        menuPrincipal.add(menuSair);
+    }
+
+    private void adicionarOpcoes() {
+        // Itens do menu "Cadastro"
+        JMenuItem itemCadastroUsuarios = new JMenuItem("Usuários");
+        JMenuItem itemCadastroPessoas = new JMenuItem("Pessoas");
+        menuCadastro.add(itemCadastroUsuarios);
+        menuCadastro.add(itemCadastroPessoas);
+
+        // Itens do menu "Visualização"
+        JMenuItem itemVisualizacaoListaUsuarios = new JMenuItem("Lista de usuários");
+        JMenuItem itemVisualizacaoListaPessoas = new JMenuItem("Lista de pessoas");
+        menuVisualizacao.add(itemVisualizacaoListaUsuarios);
+        menuVisualizacao.add(itemVisualizacaoListaPessoas);
+    }
+
+    public JMenuBar getMenuPrincipal() {
+        return menuPrincipal;
+    }
+}

@@ -1,0 +1,39 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class JanelaPrincipal {
+    private JFrame frame;
+    private JTextArea areaTrabalho;
+    private MenuSistema menuSistema;
+    private Rodape rodape;
+
+    public JanelaPrincipal() {
+        configurarJanela();
+        adicionarComponentes();
+    }
+
+    private void configurarJanela() {
+        frame = new JFrame("Sistema Pessoa");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 800);
+        frame.setLocationRelativeTo(null); // Centraliza a janela
+    }
+
+    private void adicionarComponentes() {
+        // Configuração do menu
+        menuSistema = new MenuSistema();
+        frame.setJMenuBar(menuSistema.getMenuPrincipal());
+
+        // Configuração da área de trabalho
+        areaTrabalho = new JTextArea();
+        frame.getContentPane().add(BorderLayout.CENTER, areaTrabalho);
+
+        // Configuração do rodapé
+        rodape = new Rodape();
+        frame.getContentPane().add(BorderLayout.SOUTH, rodape.getPainelRodape());
+    }
+
+    public void exibir() {
+        frame.setVisible(true);
+    }
+}

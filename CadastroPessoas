@@ -1,0 +1,41 @@
+public class CadastroPessoas {
+    public static void abrirCadastroPessoas(JFrame principal) {
+        JDialog cadastroPessoas = new JDialog(principal, "Cadastro de Pessoas", true);
+        cadastroPessoas.setSize(600, 300);
+        cadastroPessoas.setLayout(new BorderLayout());
+
+        JLabel titulo = new JLabel("Cadastro de Pessoas", SwingConstants.CENTER);
+        cadastroPessoas.add(titulo, BorderLayout.NORTH);
+
+        JPanel painelCampos = new JPanel(new GridLayout(4, 2, 5, 5));
+        painelCampos.add(new JLabel("Nome:"));
+        painelCampos.add(new JTextField(25));
+        painelCampos.add(new JLabel("CPF:"));
+        painelCampos.add(new JTextField(15));
+        painelCampos.add(new JLabel("Email:"));
+        painelCampos.add(new JTextField(30));
+        painelCampos.add(new JLabel("Telefone:"));
+        painelCampos.add(new JTextField(15));
+
+        JPanel painelBotoes = criarPainelBotoes(cadastroPessoas);
+
+        cadastroPessoas.add(painelCampos, BorderLayout.CENTER);
+        cadastroPessoas.add(painelBotoes, BorderLayout.SOUTH);
+
+        cadastroPessoas.setLocationRelativeTo(null);
+        cadastroPessoas.setVisible(true);
+    }
+
+    private static JPanel criarPainelBotoes(JDialog dialog) {
+        JPanel painelBotoes = new JPanel();
+        JButton botaoSalvar = new JButton("Salvar");
+        JButton botaoCancelar = new JButton("Cancelar");
+
+        botaoCancelar.addActionListener(e -> dialog.dispose());
+
+        painelBotoes.add(botaoSalvar);
+        painelBotoes.add(botaoCancelar);
+
+        return painelBotoes;
+    }
+}

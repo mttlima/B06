@@ -1,0 +1,25 @@
+public class SistemaPessoa extends JPanel {
+    public static void main(String args[]) {
+        final String versaoSistema = "12.1.2024";
+        String nomeUsuario = "denys.silva";
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+        String dataAcesso = dateFormat.format(new Date());
+
+        JFrame principal = new JFrame("Sistema Pessoa");
+        principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        principal.setSize(800, 800);
+
+        MenuPrincipal menuPrincipal = new MenuPrincipal(principal);
+        JTextArea areaTrabalho = new JTextArea();
+        JPanel painelRodape = new JPanel();
+        JLabel labelRodape = new JLabel("Versão: " + versaoSistema + "    Usuário: " + nomeUsuario + "    Data de acesso: " + dataAcesso);
+        painelRodape.add(labelRodape);
+
+        principal.getContentPane().add(BorderLayout.NORTH, menuPrincipal);
+        principal.getContentPane().add(BorderLayout.CENTER, areaTrabalho);
+        principal.getContentPane().add(BorderLayout.SOUTH, painelRodape);
+
+        principal.setLocationRelativeTo(null);
+        principal.setVisible(true);
+    }
+}

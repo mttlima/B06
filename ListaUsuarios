@@ -1,0 +1,31 @@
+public class ListaUsuarios {
+    public static void abrirListaUsuarios(JFrame principal) {
+        JDialog listaUsuarios = new JDialog(principal, "Lista de Usuários", true);
+        listaUsuarios.setSize(600, 300);
+        listaUsuarios.setLayout(new BorderLayout());
+
+        JLabel titulo = new JLabel("Lista de Usuários", SwingConstants.CENTER);
+        listaUsuarios.add(titulo, BorderLayout.NORTH);
+
+        JTextArea areaLista = new JTextArea();
+        listaUsuarios.add(new JScrollPane(areaLista), BorderLayout.CENTER);
+
+        JPanel painelBotoes = criarPainelBotoes(listaUsuarios);
+
+        listaUsuarios.add(painelBotoes, BorderLayout.SOUTH);
+
+        listaUsuarios.setLocationRelativeTo(null);
+        listaUsuarios.setVisible(true);
+    }
+
+    private static JPanel criarPainelBotoes(JDialog dialog) {
+        JPanel painelBotoes = new JPanel();
+        JButton botaoFechar = new JButton("Fechar");
+
+        botaoFechar.addActionListener(e -> dialog.dispose());
+
+        painelBotoes.add(botaoFechar);
+
+        return painelBotoes;
+    }
+}
